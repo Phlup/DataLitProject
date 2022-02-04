@@ -16,7 +16,7 @@ with open("total_speaches_keywords.pickle","rb") as f:
 chunks = [categorysums[x:x+6] for x in range(0,len(categorysums),6)]
 
 
-with open("total_speaches","rb") as f:
+with open("total_speaches.pickle","rb") as f:
     timedic=pickle.load(f)
     sums=[]
     for value in timedic:
