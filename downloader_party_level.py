@@ -29,28 +29,26 @@ parties={"FDP": "Q1387991",
 "Linke": "Q1826856",
 "SPD": "Q2207512"}
 
-print(requests_amt("Q2207512","2021-01-01","2021-02-01"))
+# total amount of speaches for normalization
 timedict={}
 for party in parties:
-    break
-    print(party)
     timedict[party]=[]
     for m in range(len(months)-1):
         timedict[party].append(requests_amt(parties[party],months[m],months[m+1]))
 
-with open("asdasd","wb") as f:
+with open("total_speaches.pickle","wb") as f:
     pickle.dump(timedict,f)
 
 
 
 wdic={}
-for word in ["Arbeit", "Digitalisierung", "Wirtschaft", "Forschung", "Bildung", "Kinder", "Frauen", "Vielfalt", "Klimaschutz", "Erneuerbar", "Bundeswehr", "Menschenrechte", "Nachhaltigkeit"]:
+#word count per party
+for word in ["Arbeit", "Digitalisierung", "Wirtschaft", "Forschung", "Bildung", "Kinder", "Frauen", "Vielfalt", "Klimaschutz", "Erneuerbare", "Bundeswehr", "Menschenrechte", "Nachhaltigkeit"]:
     wdic[word]={}
-    print(word)
     for party in parties:
         wdic[word][party]=[]
         for m in range(len(months)-1):
             wdic[word][party].append(requests_amt(parties[party],months[m],months[m+1],word))
 
-with open("wordbla.pickle","wb") as f:
+with open("total_speaches_keywords.pickle","wb") as f:
     pickle.dump(wdic,f)
