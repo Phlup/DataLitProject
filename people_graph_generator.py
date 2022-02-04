@@ -5,12 +5,7 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-def requests_amt(person, fromd, tod, query=None):
-    with urllib.request.urlopen(
-            f'https://de.openparliament.tv/api/v1/search/media?q={query}&personID={person}&dateFrom={fromd}&dateTo={tod}',
-            context=ctx) as url:
-        data = json.loads(url.read().decode())
-        return data["meta"]["results"]["total"]
+
 
 
 with open("people.pickle", "rb") as f:
@@ -25,19 +20,36 @@ for p in pdic:
         filtered.append(p)
         anzs.append(p["anz"])
 
+parties={"FDP": "Q1387991",
+"CDU": "Q1023134",
+"Grüne": "Q1007353",
+"AFD": "Q42575708",
+"Linke": "Q1826856",
+"SPD": "Q2207512"}
+colors = {"Q1387991":"yellow",
+           "Q1023134":"black",
+            "Q1007353":"green",
+            "Q42575708":"blue",
+            "Q1826856":"purple",
+           "Q2207512":"red"}
+
+
 print(len(filtered), len(pdic))
 print(np.mean(anzs))
 plt.hist(anzs, bins=15)
-plt.savefig("peoplehist.png")
+_, bins, _ = plt.hist(anzs, bins=50)
+plt.clf()
+for party in parties:
+    c=[]
+    for p in pdic:
+        if p["factionID"]==parties[party]:
+            c.append(p["anz"])
+    plt.hist(c, bins=bins, alpha=0.3,color=colors[parties[party]])
 
-parties = {"FDP": "Q1387991",
-           "CDU": "Q1023134",
-           "Grüne": "Q1007353",
-           "AFD": "Q42575708",
-           "Linke": "Q1826856",
-           "SPD": "Q2207512"}
+plt.savefig("hist_speeches_people_parties.png")
+plt.clf()
 
-print(filtered[0]["factionID"])
+
 ps = set(parties.values())
 for pa in ps:
     print(pa)
@@ -49,19 +61,20 @@ for pa in ps:
 plt.clf()
 words=["Arbeit", "Digitalisierung", "Wirtschaft", "Forschung", "Bildung", "Kinder", "Frauen", "Vielfalt", "Klimaschutz", "Erneuerbare", "Bundeswehr", "Menschenrechte", "Nachhaltigkeit"]
 person_w_amt={}
+
+
+with open("persons_filtered_keywords.pickle", "rb") as f:
+    filtered = pickle.load(f)
 for word in words:
+    i=0
     anzs=[]
     for p in filtered:
-        if "word_count" not in p:
-            p["word_count"]=[]
-        amt=requests_amt(p["id"],fromd,tod,word)
-        p["word_count"].append(amt)
-        anzs.append(amt)
+        anzs.append(p["word_count"][i])
     plt.hist(anzs, bins=15)
     plt.title(word)
     plt.savefig("people_"+word + ".png")
     plt.clf()
+    i+=1
 
-with open("person_words.pickle","wb") as f:
-    pickle.dump(filtered,f)
+
 
