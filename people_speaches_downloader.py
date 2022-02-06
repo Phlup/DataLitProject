@@ -25,9 +25,11 @@ parties={"FDP": "Q1387991",
 
 ps=set(parties.values())
 want=[]
+idsknown=set()
 for p in dta:
-    if p["factionID"] in ps:
+    if p["factionID"] in ps and p["id"] not in idsknown:
         want.append(p)
+        idsknown.add(p["id"])
 
 fromd="2018-01-01"
 tod="2022-01-01"
