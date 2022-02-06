@@ -35,8 +35,10 @@ parties = {"FDP": "Q1387991",
 for i in range(len(X_embedded)):
     plt.plot(X_embedded[i][0],X_embedded[i][1],'ro',c=colors[persons[i]["factionID"]])
 
-plt.title("T-SNE of wc and politicians")
-plt.savefig("t-sne.pdf")
+plt.title("T-SNE of the high frequency speakers")
+plt.xlabel("TSNE-1")
+plt.ylabel("TSNE-2")
+plt.savefig("t-sne.png")
 plt.clf()
 exit(0)
 n_outliers=10
@@ -47,4 +49,8 @@ plt.scatter(X[:, 0], X[:, 1], color="black", label="inliers")
 plt.scatter(
     X[:, 0][-n_outliers:], X[:, 1][-n_outliers:], color="red", label="outliers"
 )
+plt.title("T-SNE of the high frequency speakers")
+plt.xlabel("TSNE-1")
+plt.ylabel("TSNE-2")
+
 plt.savefig("maha.png")
