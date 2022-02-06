@@ -6,9 +6,12 @@ ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
 
+from tueplots import bundles
 
 
-with open("people.pickle", "rb") as f:
+plt.rcParams.update(bundles.neurips2021())
+
+with open("people_speaches.pickle", "rb") as f:
     pdic = pickle.load(f)
 thresh = 50
 fromd="2018-01-01"
@@ -39,25 +42,34 @@ print(np.mean(anzs))
 plt.hist(anzs, bins=15)
 _, bins, _ = plt.hist(anzs, bins=50)
 plt.clf()
+cv=[]
+cols=[]
+lbls=[]
 for party in parties:
     c=[]
     for p in pdic:
-        if p["factionID"]==parties[party]:
+        if p["factionID"]==parties[party] and p["anz"] >=150:
+            print(p["label"],p["anz"])
             c.append(p["anz"])
-    plt.hist(c, bins=bins, alpha=0.3,color=colors[parties[party]])
-
-plt.savefig("hist_speeches_people_parties.png")
+    cv.append(c)
+    cols.append(colors[parties[party]])
+    lbls.append(party)
+cv=np.array(cv)
+plt.hist(cv, 30, stacked=True, density = False,color=cols,label=lbls)
+plt.legend()
+plt.title("Stacked histogram of speeches given per person and party")
+plt.xlabel("Speeches")
+plt.ylabel("Persons")
+plt.savefig("hist_speeches_people_parties.pdf")
 plt.clf()
-
 
 ps = set(parties.values())
 for pa in ps:
-    print(pa)
     nr = 0
     for p in filtered:
         if p["factionID"] == pa:
             nr += 1
-    print(nr)
+    print(pa,colors[pa],nr)
 plt.clf()
 words=["Arbeit", "Digitalisierung", "Wirtschaft", "Forschung", "Bildung", "Kinder", "Frauen", "Vielfalt", "Klimaschutz", "Erneuerbare", "Bundeswehr", "Menschenrechte", "Nachhaltigkeit"]
 person_w_amt={}
@@ -72,7 +84,7 @@ for word in words:
         anzs.append(p["word_count"][i])
     plt.hist(anzs, bins=15)
     plt.title(word)
-    plt.savefig("people_"+word + ".png")
+    plt.savefig("people_"+word + ".pdf")
     plt.clf()
     i+=1
 
