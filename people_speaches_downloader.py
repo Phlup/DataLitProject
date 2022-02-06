@@ -5,6 +5,13 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 def requests_amt(fromd,tod,person=None):
+    '''
+    gets the amount of speaches of a person in a specific timeframe
+    :param fromd:
+    :param tod:
+    :param person:
+    :return:
+    '''
     if person==None:
         q=""
     else:
@@ -22,7 +29,7 @@ parties={"FDP": "Q1387991",
 "AFD": "Q42575708",
 "Linke": "Q1826856",
 "SPD": "Q2207512"}
-
+# filter to only the parties we want and unique
 ps=set(parties.values())
 want=[]
 idsknown=set()
@@ -35,6 +42,7 @@ fromd="2018-01-01"
 tod="2022-01-01"
 
 anzs=[]
+# we get the amount of speeches per person and store the ones which have at least one
 for i  in range(len(want)):
     want[i]["anz"]=requests_amt(fromd,tod,want[i]["id"])
     anzs.append(want[i]["anz"])
@@ -46,6 +54,14 @@ with open("people_speaches.pickle","wb") as f:
 
 
 def requests_amt_p(person, fromd, tod, query=None):
+    '''
+    gets the amount of speeches of a person with a specific keyword
+    :param person:
+    :param fromd:
+    :param tod:
+    :param query:
+    :return:
+    '''
     with urllib.request.urlopen(
             f'https://de.openparliament.tv/api/v1/search/media?q={query}&personID={person}&dateFrom={fromd}&dateTo={tod}',
             context=ctx) as url:
@@ -65,7 +81,7 @@ for p in pdic:
         anzs.append(p["anz"])
 
 
-
+#download the keywords for all the persons
 words=["Arbeit", "Digitalisierung", "Wirtschaft", "Forschung", "Bildung", "Kinder", "Frauen", "Vielfalt", "Klimaschutz", "Erneuerbare", "Bundeswehr", "Menschenrechte", "Nachhaltigkeit"]
 person_w_amt={}
 for word in words:

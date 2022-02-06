@@ -21,6 +21,7 @@ colors = {"FDP":"yellow",
             "Linke":"purple",
            "SPD":"red"}
 
+# create the double plot in the paper
 
 fig, (ax1, ax2) = plt.subplots(1, 2)
 #fig.suptitle('Horizontally stacked subplots')
@@ -54,10 +55,7 @@ ax2.set_title("Bildung")
 
 plt.savefig("bar_arbeit_Bildung.pdf")
 
-
-
-exit(0)
-
+# create single plots for selected keywords
 for word  in ["Arbeit","Bildung"]:
     fvalue, pvalue = stats.f_oneway(*list(wordb[word].values()))
     print(word,pvalue)
@@ -71,9 +69,11 @@ for word  in ["Arbeit","Bildung"]:
     plt.title(word)
     plt.savefig("bar_"+ word+".pdf")
     plt.clf()
-
+# check til what date do we have data
 summonth=np.array(timedic["CDU"]) + np.array(timedic["SPD"])  + np.array(timedic["Grüne"])  + np.array(timedic["FDP"])  + np.array(timedic["AFD"])
 print(summonth[-10:])
+
+# total speeches per party plot
 for p in timedic:
     x=range(0,len(timedic[p]))
     plt.plot(x,timedic[p],label=p, alpha=1,color=colors[p])
@@ -86,6 +86,8 @@ plt.xticks([0,6,12,18,24,30,36,42,48])
 plt.savefig("parties_over_time.pdf")
 
 plt.clf()
+
+# print the numbers for the correlation analysis
 words=["Arbeit", "Digitalisierung", "Wirtschaft", "Forschung", "Bildung", "Kinder", "Frauen", "Vielfalt", "Klimaschutz", "Erneuerbare", "Bundeswehr", "Menschenrechte", "Nachhaltigkeit"]
 
 for w in words:

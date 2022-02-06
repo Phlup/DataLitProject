@@ -4,6 +4,14 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 def requests_amt(faction,fromd,tod,query=None):
+    '''
+    accsesses the api and returns the amount of results
+    :param faction:
+    :param fromd:
+    :param tod:
+    :param query:
+    :return:
+    '''
     if query==None:
         q=""
     else:

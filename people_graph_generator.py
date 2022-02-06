@@ -37,8 +37,7 @@ colors = {"Q1387991":"yellow",
            "Q2207512":"red"}
 
 
-print(len(filtered), len(pdic))
-print(np.mean(anzs))
+# plot a histogramm of the speakers
 plt.hist(anzs, bins=15)
 _, bins, _ = plt.hist(anzs, bins=50)
 plt.clf()
@@ -63,7 +62,9 @@ plt.ylabel("Persons")
 plt.savefig("hist_speeches_people_parties.pdf")
 plt.clf()
 
+# check how many high frequency speackers each party has
 ps = set(parties.values())
+
 for pa in ps:
     nr = 0
     for p in filtered:
@@ -74,7 +75,7 @@ plt.clf()
 words=["Arbeit", "Digitalisierung", "Wirtschaft", "Forschung", "Bildung", "Kinder", "Frauen", "Vielfalt", "Klimaschutz", "Erneuerbare", "Bundeswehr", "Menschenrechte", "Nachhaltigkeit"]
 person_w_amt={}
 
-
+# create histograms for the high frequency speakers on the keywords
 with open("persons_filtered_keywords.pickle", "rb") as f:
     filtered = pickle.load(f)
 for word in words:
