@@ -15,7 +15,7 @@ def requests_amt(faction,fromd,tod,query=None):
 
 months=[]
 for year in range(2018,2022):
-    for month in range(1,12):
+    for month in range(1,13):
         month=str(month)
         if len(month)==1:
             month= "0"+ month
